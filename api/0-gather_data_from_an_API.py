@@ -47,10 +47,11 @@ def get_employee_todo_progress(employee_id):
             done_tasks += 1
             completed_task_titles.append(task.get("title"))
 
-    # Display the progress
+    # Display the progress (fixed E501)
     print(f"Employee {employee_name} is done with tasks("
           f"{done_tasks}/{total_tasks}):")
     for title in completed_task_titles:
+        # Fixed the exact formatting for tab and space
         print(f"\t {title}")
 
 
