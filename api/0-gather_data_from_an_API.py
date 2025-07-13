@@ -5,8 +5,10 @@ returns information about his/her TODO list progress.
 
 The script accepts an integer as a parameter, which is the employee ID.
 It displays the employee TODO list progress in the exact format:
-First line: Employee EMPLOYEE_NAME is done with tasks(NUMBER_OF_DONE_TASKS/TOTAL_NUMBER_OF_TASKS):
-Second and N next lines display the title of completed tasks:    TASK_TITLE
+First line: Employee EMPLOYEE_NAME is done with tasks
+(NUMBER_OF_DONE_TASKS/TOTAL_NUMBER_OF_TASKS):
+Second and N next lines display the title of completed tasks:
+    TASK_TITLE (with 1 tabulation and 1 space before the TASK_TITLE)
 """
 
 import requests
@@ -20,7 +22,6 @@ def get_employee_todo_progress(employee_id):
     Args:
         employee_id (int): The ID of the employee.
     """
-    # Base URL for the API
     base_url = "https://jsonplaceholder.typicode.com"
 
     # Fetch user information
@@ -28,7 +29,6 @@ def get_employee_todo_progress(employee_id):
     user_response = requests.get(user_url)
     user_data = user_response.json()
 
-    # Get employee name using .get() for safe access
     employee_name = user_data.get("name")
 
     # Fetch TODO list for the employee
@@ -36,7 +36,6 @@ def get_employee_todo_progress(employee_id):
     todos_response = requests.get(todos_url)
     todos_data = todos_response.json()
 
-    # Initialize counters and list for completed tasks
     total_tasks = 0
     done_tasks = 0
     completed_task_titles = []
@@ -44,23 +43,23 @@ def get_employee_todo_progress(employee_id):
     # Process TODO data
     for task in todos_data:
         total_tasks += 1
-        # Check if task is completed using .get()
         if task.get("completed"):
             done_tasks += 1
-            # Get task title using .get()
             completed_task_titles.append(task.get("title"))
 
     # Display the progress
-    print(f"Employee {employee_name} is done with tasks({done_tasks}/{total_tasks}):")
+    print(f"Employee {employee_name} is done with tasks("
+          f"{done_tasks}/{total_tasks}):")
     for title in completed_task_titles:
         print(f"\t {title}")
 
 
 if __name__ == "__main__":
+    if len(sys.argv) != 2:
+        print("Usage: python3 0-gather_data_from_an_API.py <employee_id>")
+        sys.exit(1)
     try:
-        # Get employee ID from console input
-        employee_id_input = input("Enter the employee ID: ")
-        employee_id = int(employee_id_input)
+        employee_id = int(sys.argv[1])
         get_employee_todo_progress(employee_id)
     except ValueError:
         print("Error: Employee ID must be an integer.")
